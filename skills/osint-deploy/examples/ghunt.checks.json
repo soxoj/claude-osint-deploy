@@ -1,0 +1,10 @@
+{
+  "tool": "ghunt", "class": "cli-auth-gated", "stack": "uv-tool",
+  "checks": [
+    {"name":"banner","tier":"T0","cmd":"ghunt --help","expect_regex":"usage|GHunt"},
+    {"name":"auth-gate-is-clean","tier":"T0","timeout":120,
+     "cmd":"ghunt email test@gmail.com","expect_exit":1,
+     "expect_regex":"generate a new session by doing => ghunt login"}
+  ],
+  "blocked": "AUTH_REQUIRED - run `ghunt login` with a real Google session before T2 is meaningful"
+}

@@ -1,0 +1,11 @@
+{
+  "tool": "web-check", "class": "server", "stack": "docker",
+  "checks": [
+    {"name":"image-present","tier":"T0","timeout":60,
+     "cmd":"docker image inspect lissy93/web-check:latest --format '{{json .Config.Cmd}}'",
+     "expect_regex":"server\\.js"},
+    {"name":"api-headers","tier":"T2","network":true,"retry":1,"timeout":300,
+     "cmd":"CID=$(docker run -d -p 3000 lissy93/web-check:latest); A=$(docker port $CID 3000/tcp|head -1); curl -sS -m 120 --retry 30 --retry-delay 2 --retry-connrefused \"http://$A/api/headers?url=https://example.com\"; R=$?; docker rm -f $CID >/dev/null; exit $R",
+     "expect_regex":"\"content-type\""}
+  ]
+}

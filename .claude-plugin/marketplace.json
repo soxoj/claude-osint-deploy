@@ -1,0 +1,12 @@
+{
+  "name": "osint-deploy-marketplace",
+  "description": "Deploy-and-verify tooling for OSINT tools from GitHub",
+  "owner": { "name": "Soxoj", "url": "https://github.com/soxoj" },
+  "plugins": [
+    {
+      "name": "osint-deploy",
+      "source": "./",
+      "description": "Install, run and verify OSINT tools from GitHub on any OS"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "tool": "GhostTrack", "class": "cli-interactive", "stack": "uv-venv",
+  "_shape": "MENU / prompt-driven tool that reads stdin instead of argv (no --help). Feed keystrokes with printf and \\n; assert on the OUTPUT, and set expect_exit to whatever the tool returns when its input loop hits EOF (often nonzero), not 0.",
+  "checks": [
+    {"name":"menu-launch-show-ip","tier":"T0","timeout":30,
+     "cwd":"~/osint_tools/src/GhostTrack",
+     "cmd":"printf '2\\n\\n0\\n' | .venv/bin/python GhostTR.py",
+     "expect_regex":"IP Tracker.*Show Your IP|Your IP Adrress","expect_absent":"ModuleNotFoundError"},
+    {"name":"ip-track-8.8.8.8","tier":"T2","network":true,"retry":1,"retry_delay":10,"timeout":40,
+     "cwd":"~/osint_tools/src/GhostTrack",
+     "cmd":"printf '1\\n8.8.8.8\\n' | .venv/bin/python GhostTR.py",
+     "expect_regex":"Google LLC|San Jose","expect_absent":"ModuleNotFoundError",
+     "expect_exit":1,
+     "net_if_matches":"Max retries|Connection|timed out"}
+  ],
+  "note": "GhostTrack menu: 1=IP 2=ShowIP 3=Phone 4=Username 0=Exit. T0 feeds '2\\n\\n0\\n' (Show-IP then Exit -> clean exit 0); T2 feeds '1\\n8.8.8.8\\n' (IP-track, then EOF -> exit 1 while the geo output above it is correct). The same stdin technique smoke-tests any prompt-driven tool (emploleaks, SatIntel, CardPwn): pipe the shortest sequence that exercises one real action, assert on output, expect the EOF exit code."
+}

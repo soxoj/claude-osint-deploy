@@ -1,0 +1,10 @@
+{
+  "name": "osint-deploy",
+  "description": "Install, run and verify OSINT tools from GitHub on macOS, Windows or Linux",
+  "version": "0.1.0",
+  "author": { "name": "Soxoj", "url": "https://github.com/soxoj" },
+  "homepage": "https://github.com/soxoj/claude-osint-deploy",
+  "repository": "https://github.com/soxoj/claude-osint-deploy",
+  "license": "MIT",
+  "keywords": ["osint", "recon", "deployment", "verification", "docker", "uv", "wsl"]
+}

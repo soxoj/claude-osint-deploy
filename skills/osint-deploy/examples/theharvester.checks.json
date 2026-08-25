@@ -1,0 +1,41 @@
+{
+  "tool": "theHarvester",
+  "stack": "docker (official image, discovered by recon.py)",
+  "checks": [
+    {
+      "name": "cli-help",
+      "tier": "T0",
+      "timeout": 120,
+      "cmd": "docker run --rm --entrypoint theHarvester ghcr.io/laramies/theharvester:latest --help",
+      "expect_regex": "usage: theHarvester"
+    },
+    {
+      "name": "entrypoint-is-webui",
+      "tier": "T0",
+      "timeout": 120,
+      "cmd": "docker inspect ghcr.io/laramies/theharvester:latest --format '{{json .Config.Entrypoint}}'",
+      "expect_regex": "harvestview"
+    },
+    {
+      "name": "unit-tests-from-source",
+      "tier": "T1",
+      "timeout": 900,
+      "cmd": "PATH=$HOME/osint_tools/src/theHarvester/.venv/bin:$PATH .venv/bin/pytest -q",
+      "cwd": "~/osint_tools/src/theHarvester",
+      "expect_regex": "[0-9]+ passed"
+    },
+    {
+      "name": "readme-example",
+      "tier": "T2",
+      "network": true,
+      "retry": 2,
+      "timeout": 420,
+      "cmd": "out=$(docker run --rm --entrypoint theHarvester ghcr.io/laramies/theharvester:latest -d example.com -b crtsh,certspotter 2>&1); echo \"$out\"; echo \"$out\" | grep -q 'www.example.com' || { echo \"source-health: crtsh=$(curl -s -o /dev/null -w '%{http_code}' -m 20 'https://crt.sh/?q=example.com&output=json') certspotter=$(curl -s -o /dev/null -w '%{http_code}' -m 20 'https://api.certspotter.com/v1/issuances?domain=example.com&include_subdomains=true&expand=dns_names')\"; exit 1; }",
+      "expect_regex": "www\\.example\\.com",
+      "expect_absent": "unrecognized arguments",
+      "retry_delay": 30,
+      "note": "self-diagnosing: on an empty result it probes the upstream sources, so a crt.sh 502 is classified NET/UPSTREAM instead of a bogus install FAIL",
+      "net_if_matches": "(crtsh|certspotter)=(5\\d\\d|000|429)"
+    }
+  ]
+}
