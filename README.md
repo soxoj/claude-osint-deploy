@@ -1,6 +1,14 @@
-# OSINT Deploy Skill
+# OSINT Tool Deploy Skill
 
-Claude Code plugin/skill: install an OSINT tool from GitHub on any OS and **prove it works**.
+<p align="center">
+  <img src="docs/logo.jpeg" alt="claude-osint-deploy" width="220">
+</p>
+
+<p align="center">
+  <b>Claude Code plugin/skill: install an OSINT tool from GitHub on any OS and prove it works.</b>
+</p>
+
+## Quick Start
 
 **As a plugin** (gets updates, one command to install):
 
@@ -42,7 +50,7 @@ Getting there means answering questions you would otherwise answer by hand:
 Everything it learns goes into a recipe, so reinstalling the same tool later — or on another
 machine — is one command.
 
-## Layout
+## What's Inside
 
 ```
 skills/osint-deploy/
@@ -59,13 +67,26 @@ skills/osint-deploy/
 
 ## Verified
 
-Developed against **~65 repositories** from GitHub's `topic:osint` (the top 10 by stars plus random
-samples down to rank ~300), of which **50 tools were deployed and verified end-to-end** — each with a
-passing check manifest in `~/osint_tools/recipes/`. The rest were correctly classified as
-not-installable (awesome-lists, a wordlist, a desktop `.exe`, multi-container platforms). The verified
-set spans plain CLIs, servers, a desktop app, browser extensions, prebuilt Go binaries and pure-offline
-generators. `examples/` ships five manifest templates, one per check shape (CLI, Docker-CLI, server,
-auth-gated, interactive/stdin).
+Two honest numbers:
+
+- **~65 repositories examined** — from GitHub's `topic:osint` (the top 10 by stars, plus random
+  samples down to rank ~300).
+- **50 tools deployed and verified end-to-end** — each with a passing check manifest in
+  `~/osint_tools/recipes/`.
+
+The rest were correctly classified as **not-installable** (awesome-lists, a wordlist, a desktop
+`.exe`, multi-container platforms) — a "no" is a valid result, not a failure.
+
+The verified set spans:
+
+- plain CLIs and interactive/stdin menu tools
+- web servers and a desktop app
+- browser extensions
+- prebuilt Go binaries and pure-offline generators
+- auth-gated tools (reported as `NEEDS_KEY`, not silently skipped)
+
+`examples/` ships **five** manifest templates, one per check shape: CLI, Docker-CLI, server,
+auth-gated, interactive/stdin.
 
 ## Requirements
 
@@ -73,11 +94,8 @@ auth-gated, interactive/stdin).
 per tool: `uv` is the default Python path and can bootstrap its own interpreter, Docker is the
 fallback for anything with heavy native deps, and neither is required up front.
 
-## Scope
-
-Deployment tooling. Use the tools it installs only against targets you are authorised to
-investigate; verification is limited to one small query per check against the targets the projects
-themselves document.
+> Use the tools it installs only against targets you are authorised to investigate. Verification is
+> limited to one small query per check, against the targets the projects themselves document.
 
 ## License
 
